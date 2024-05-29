@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="local/whoisip/db" VERSION="20240527" COMMENT="XMLDB file for Moodle local/test"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="local_whoisip_logs" COMMENT="Se guardan los logs de las peticiones de datos con el IP">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="country" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" COMMENT="Country"/>
+        <FIELD NAME="countrycode" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="region" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="city" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false" />
+        <FIELD NAME="zip" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false" />
+        <FIELD NAME="lat" TYPE="float" NOTNULL="false" SEQUENCE="false" DEFAULT="0"/>
+        <FIELD NAME="lon" TYPE="float" NOTNULL="false" SEQUENCE="false" DEFAULT="0"/>
+        <FIELD NAME="timezone" TYPE="char" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="isp" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="org" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="as" TYPE="char" LENGTH="100" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT=""/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="userid" UNIQUE="true" FIELDS="userid" COMMENT=""/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
