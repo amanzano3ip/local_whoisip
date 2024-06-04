@@ -18,6 +18,10 @@ namespace local_whoisip;
 
 use local_whoisip\requests\ipapi;
 use moodle_exception;
+use stdClass;
+
+global $CFG;
+require_once($CFG->dirroot.'/user/lib.php');
 
 /**
  * Tools
@@ -38,6 +42,34 @@ class tools {
         } catch (moodle_exception $e) {
             var_dump($e->getMessage());
         }
+    }
+
+
+    /**
+     * Update User with IP Data.
+     * 
+     * @param stdClass $user
+     * @param stdClass $data
+     */
+    public static function update_user(stdClass $user, stdClass $data) {
+        $user->city = $data->city;
+        $user->country = $data->countrycode;
+        user_update_user($user);
+        profile_load_data($user);
+        if (isset($user->profile_field_isp)) {
+            $user->profile_field_isp = $data->isp;
+        } else {
+            $code = '3001';
+            $msg = 'El campo personalizado de usuario ISP no existe.';
+            error_log($code . ': ' . $msg);
+        }
+        if (isset($user->profile_field_lat)) {
+            $user->profile_field_lat = $data->lat;
+        }
+        if (isset($user->profile_field_lon)) {
+            $user->profile_field_lon = $data->lon;
+        }
+        profile_save_data($user);
     }
 
 }

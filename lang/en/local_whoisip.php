@@ -26,3 +26,5 @@ $string['pluginname'] = 'WhoIsIP';
 $string['settingpage'] = 'Configuration WhoIsIP';
 $string['urlapi'] = 'URL API';
 $string['urlapi_desc'] = 'It is the URL where the request will be called';
+$string['timeout'] = 'Timeout';
+$string['timeout_desc'] = 'Timeout response API';

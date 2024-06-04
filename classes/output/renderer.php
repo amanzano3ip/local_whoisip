@@ -14,17 +14,23 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace local_whoisip\output;
+
+use plugin_renderer_base;
+
 /**
- * Strings for component 'whoisipo', language 'es'
+ * Renderer for WhoIsIP
  *
  * @package    local_whoisip
  * @copyright  Tresipunt {@link http://www.tresipunt.com}
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class renderer extends plugin_renderer_base {
 
-$string['pluginname'] = 'WhoIsIP';
-$string['settingpage'] = 'Configuración WhoIsIP';
-$string['urlapi'] = 'URL del API';
-$string['urlapi_desc'] = 'Es la URL donde se llamará la petición';
-$string['timeout'] = 'Tiempo máximo de respuesta';
-$string['timeout_desc'] = 'Tiempo máximo de respuesta en segundos de la petición';
+
+    public function render_index_page(index_page $page) {
+        $data = $page->export_for_template($this);
+        return parent::render_from_template("local_whoisip/index_page", $data);
+    }
+
+}

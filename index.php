@@ -22,4 +22,33 @@
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use local_whoisip\output\index_page;
+
 include('../../config.php');
+
+global $PAGE, $OUTPUT;
+
+require_login();
+
+if (is_siteadmin()) {
+
+    $PAGE->set_url(new moodle_url('/local/whoisip/index.php'));
+    $PAGE->set_context(context_system::instance());
+    $PAGE->set_title('Listado de Logs de Geolocalización');
+    $PAGE->set_heading('Listado de Logs de Geolocalización');
+    $PAGE->set_pagelayout('incourse');
+
+    $renderer = $PAGE->get_renderer('local_whoisip');
+    $page = new index_page();
+
+    echo $OUTPUT->header();
+
+    echo $renderer->render($page);
+
+    echo $OUTPUT->footer();
+
+} else {
+
+    throw new moodle_exception('Usted no es administrador');
+}
+

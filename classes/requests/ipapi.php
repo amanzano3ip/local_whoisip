@@ -35,6 +35,9 @@ class ipapi {
     /** @var string URL API */
     protected $url;
 
+    /** @var int Timeout in seconds */
+    protected $timeout;
+
     /**
      * Constructor.
      *
@@ -42,6 +45,7 @@ class ipapi {
      */
     public function __construct() {
         $this->url = get_config('local_whoisip', 'url');
+        $this->timeout = empty(get_config('local_whoisip', 'timeout')) ? 5 : get_config('local_whoisip', 'timeout');
     }
 
     /**
@@ -82,7 +86,7 @@ class ipapi {
      * @return string
      */
     public function get_mock_ip() {
-        return '72.59.9.12';
+        return optional_param('ip', '62.59.9.12', PARAM_RAW);
     }
 
     /**
@@ -91,15 +95,15 @@ class ipapi {
     public function get_data() {
         try {
             $curl = new curl();
+            //$curl->setopt(['CURLOPT_TIMEOUT', $this->timeout]);
             $response = $curl->get($this->get_url());
             $response = json_decode($response);
             if (isset($response->status)) {
                 if ($response->status === 'success') {
                     logs::insert_or_update($response);
-                    error_log('PETICIÓN OK:' . json_encode($response));
                 } else {
                     $code = '1002';
-                    $msg = $response->message;
+                    $msg = $response->message;                 
                     error_log($code . ': ' . $msg);
                 }
             } else {

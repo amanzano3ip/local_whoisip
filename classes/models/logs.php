@@ -18,6 +18,7 @@ namespace local_whoisip\models;
 
 use moodle_exception;
 use stdClass;
+use local_whoisip\tools;
 
 /**
  * Logs
@@ -27,6 +28,27 @@ use stdClass;
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class logs {
+
+    const TABLE = 'local_whoisip_logs';
+
+    /**
+     * Get by User ID.
+     * 
+     * @param int $userid
+     * @return stdClass|bool
+     */
+    public static function get_by_userid(int $userid) {
+        global $DB;
+        try {
+            $obj = $DB->get_record(self::TABLE, ['userid' => $userid]);
+            return $obj;
+        } catch (moodle_exception $e) {
+            $code = '2002';
+            $msg = $e->getMessage();
+            error_log($code . ': ' . $msg);
+            return false;
+        }
+    }
 
     /**
      * Insert or update.
@@ -38,22 +60,37 @@ class logs {
         global $DB, $USER;
 
         $user = !is_null($user) ? $user : $USER;
+        
+        $userid = optional_param('userid', $user->id, PARAM_INT);
+
+        $user = \core_user::get_user($userid);
 
         $object = new stdClass();
         $object->userid = $user->id;
-        $object->timecreated = time();
         $object->country = isset($data->country) ? $data->country : '';
         $object->countrycode = isset($data->countryCode) ? $data->countryCode : '';
         $object->region = isset($data->region) ? $data->region : '';
         $object->city = isset($data->city) ? $data->city : '';
+        $object->zip = isset($data->zip) ? $data->zip : '';
+        $object->lat = isset($data->lat) ? $data->lat : 0;
+        $object->lon = isset($data->lon) ? $data->lon : 0;
+        $object->timezone = isset($data->timezone) ? $data->timezone : '';
+        $object->isp = isset($data->isp) ? $data->isp : '';
+        $object->org = isset($data->org) ? $data->org : '';
+        $object->asi = isset($data->as) ? $data->as : '';
+        $object->timecreated = time();
 
         try {
-            $obj = $DB->get_record('local_whoisip_logs', ['userid' => $user->id]);
+            $obj = self::get_by_userid($user->id);
             if ($obj) {
-                $DB->update_record('local_whoisip_logs', $obj);
+                $object->id = $obj->id;
+                $DB->update_record(self::TABLE, $object);
             } else {
-                $DB->insert_record('local_whoisip_logs', $object);
+                $DB->insert_record(self::TABLE, $object);
             }
+
+            tools::update_user($user, $object);
+
         } catch (moodle_exception $e) {
             $code = '2001';
             $msg = $e->getMessage();

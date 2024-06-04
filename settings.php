@@ -31,6 +31,7 @@ if ($hassiteconfig) {
             get_string('settingpage', 'local_whoisip')
     );
 
+
     $ADMIN->add('localplugins', $settings);
     //$ADMIN->add('modules', new admin_category('local_whoisip_category',
     //        'Local WhoIsIP Categoría'));
@@ -43,9 +44,18 @@ if ($hassiteconfig) {
             'local_whoisip/url',
             get_string('urlapi', 'local_whoisip'),
             get_string('urlapi_desc', 'local_whoisip'),
-            'http://www.elpais.es',
+            'http://ip-api.com',
             PARAM_URL,
             60);
+
+    $settings->add($setting);    
+
+    $setting = new admin_setting_configtext(
+        'local_whoisip/timeout',
+        get_string('timeout', 'local_whoisip'),
+        get_string('timeout_desc', 'local_whoisip'),
+        5,
+        PARAM_INT);
 
     $settings->add($setting);
 
